@@ -7,7 +7,7 @@
     <Recommend :recommends="recommends"></Recommend>
     <FeatureView></FeatureView>
     <TabControl :titles="['流行','新款','精选']" class="tab-control"></TabControl>
-    <GoodsList :goods="goods"></GoodsList>
+    <goods-list :goods="goods['pop'].list"></goods-list>
     <ul>
       <li>列表1</li>
       <li>列表2</li>
@@ -138,11 +138,11 @@
       return {
         banners: [],
         recommends: [],
-        goods: [
-          {'pop': {page: 0, list: []}},
-          {'new': {page: 0, list: []}},
-          {'sell': {page: 0, list: []}},
-        ]
+        goods: {
+          'pop': {page: 0, list: []},
+          'new': {page: 0, list: []},
+          'sell': {page: 0, list: []},
+        }
       }
     },
     created() {
@@ -157,7 +157,7 @@
     methods: {
       getHomeMultiData() {
         getHomeMultiData().then(res => {
-          console.log(res);
+          // console.log(res);
           this.banners = res.data.banner.list;
           this.recommends = res.data.recommend.list;
         })
@@ -165,8 +165,7 @@
       getHomeGoods(type) {
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
-          this.goods[type].list.push(...res.data.list)
-          /*该方法会将一个数组解析后push到另一个数组去*/
+          this.goods[type].list.push(...res.data.list)/*该方法能够将一个数组的数据直接添加到另一个数组去*/
           this.goods[type].page += 1
 
         })
