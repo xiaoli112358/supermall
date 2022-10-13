@@ -5,9 +5,12 @@
     </navBar>
     <HomeSwiper :banners="banners"></HomeSwiper>
     <Recommend :recommends="recommends"></Recommend>
-    <FeatureView></FeatureView>
-    <TabControl :titles="['流行','新款','精选']" class="tab-control"></TabControl>
-    <goods-list :goods="goods['pop'].list"></goods-list>
+    <feature-view></feature-view>
+    <tab-control :titles="['流行','新款','精选']"
+                 class="tab-control"
+                  @tabClick="tabClick">
+    </tab-control>
+    <goods-list :goods="goods[currentType].list"></goods-list>
     <ul>
       <li>列表1</li>
       <li>列表2</li>
@@ -142,7 +145,8 @@
           'pop': {page: 0, list: []},
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []},
-        }
+        },
+        currentType:'pop'
       }
     },
     created() {
@@ -155,6 +159,27 @@
       this.getHomeGoods('sell');
     },
     methods: {
+      /**
+       * 事件监听相关的方法
+      */
+      tabClick(index){
+        // console.log(index);
+        switch (index){
+          case 0:
+            this.currentType='pop'
+            break
+          case 1:
+            this.currentType='new'
+            break
+          case 2:
+            this.currentType='sell'
+            break
+        }
+      },
+
+      /**
+       * 网络请求相关的方法
+       */
       getHomeMultiData() {
         getHomeMultiData().then(res => {
           // console.log(res);

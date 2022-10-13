@@ -28,6 +28,7 @@
     methods:{
       itemClick(index){
         this.currentIndex=index
+        this.$emit('tabClick',index)/*子组件给父组件传值*/
       }
     }
   }
