@@ -10,7 +10,7 @@
                  class="tab-control"
                   @tabClick="tabClick">
     </tab-control>
-    <goods-list :goods="goods[currentType].list"></goods-list>
+    <goods-list :goods="showGoods"></goods-list>
     <ul>
       <li>列表1</li>
       <li>列表2</li>
@@ -147,6 +147,11 @@
           'sell': {page: 0, list: []},
         },
         currentType:'pop'
+      }
+    },
+    computed:{
+      showGoods(){
+        return this.goods[this.currentType].list
       }
     },
     created() {
