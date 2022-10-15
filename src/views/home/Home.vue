@@ -131,10 +131,9 @@
       getHomeGoods(type) {
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
-          this.goods[type].list.push(...res.data.list)
-          /*该方法能够将一个数组的数据直接添加到另一个数组去*/
+          this.goods[type].list.push(...res.data.list) /*该方法能够将一个数组的数据直接添加到另一个数组去*/
           this.goods[type].page += 1
-          this.$refs.scroll.finishPullUp()
+          this.$refs.scroll.finishPullUp()/*如果没有这个方法，下拉加载更多只能加载一次*/
         })
 
       }
