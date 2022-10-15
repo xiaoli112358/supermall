@@ -119,10 +119,24 @@
       }
     },
     //组件创建完后调用
-    // mounted() {
-    //   this.scroll = new BScroll(this.$refs.aa, {})
-    //
-    // }
+    mounted() {
+      this.scroll = new BScroll(document.querySelector('.wrapper'), {
+        // probe 侦测
+        // 0,1都是不侦测实时的位置
+        // 2: 在手指滚动的过程中侦测, 手指离开后的惯性滚动过程中不侦测.
+        // 3: 只要是滚动, 都侦测.
+        probeType:2,
+        //下拉加载更多，将第二页的内容也请求回来
+        pullUpLoad:true
+      })
+      this.scroll.on('scroll',(position)=>{
+        console.log(position);
+      })
+      this.scroll.on('pullingUp',()=>{
+        console.log('上拉加载更多');
+      })
+
+    }
   }
 </script>
 
@@ -132,7 +146,7 @@
     background-color: orangered;
 
     /*原生滚动设置*/
-    /*overflow: hidden;*//*将内容全部显示到指定高度的范围内,并且隐藏了滚动条*/
+    overflow: hidden;/*将内容全部显示到指定高度的范围内,并且隐藏了滚动条*/
     /*overflow-y: scroll;*/ /*范围内的内容可以滚动,并且该属性包含上面的属性*/
   }
 </style>
