@@ -1,3 +1,4 @@
+<!--让移动端滚动更加顺滑的一个组件-->
 <template>
   <div class="wrapper" ref="wrapper">
     <div class="content">
@@ -17,7 +18,15 @@
       }
     },
     mounted() {
-      this.scroll = new BScroll(this.$refs.wrapper, {})
+      this.scroll = new BScroll(this.$refs.wrapper, {
+
+      })
+      this.scroll.scrollTo(0,0)
+    },
+    methods: {
+      scrollTo(x, y, time=300) {
+        this.scroll.scrollTo(x, y, time)
+      }
     }
   }
 </script>
