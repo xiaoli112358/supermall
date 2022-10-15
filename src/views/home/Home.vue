@@ -17,7 +17,7 @@
       </tab-control>
       <goods-list :goods="showGoods"/>
     </scroll>
-    <BackTop @click.native="backClick" v-show="isShowBackTop"></BackTop>
+    <BackTop @click.native="backClick" v-show="isShowBackTop"></BackTop><!--不是原生的标签不能直接使用点击事件，加上一个native就可以了-->
 
   </div>
 </template>
@@ -94,7 +94,7 @@
       },
       backClick() {
         // console.log('哈哈哈');
-        this.$refs.scroll.scrollTo(0, 0)
+        this.$refs.scroll.scrollTo(0, 0)/*通过ref属性来获取scroll这个子组件，此种方式可以避免class重名重名的问题*/
       },
       loadMore(){
         console.log('下拉加载更多');

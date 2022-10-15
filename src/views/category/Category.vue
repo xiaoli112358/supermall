@@ -1,4 +1,5 @@
 <template>
+  <!--注意：此处必须是主div里面套一个div，不能是多个-->
   <div class="wrapper" ref="aa">
     <div>
       <!--ul>li{分类列表$}*100-->
