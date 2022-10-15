@@ -1,8 +1,12 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav">
-      <div slot="center">购物街</div>
-    </nav-bar>
+    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <tab-control class="tab-control"
+                 :titles="['流行','新款','精选']"
+                 @tabClick="tabClick"
+                 ref="tabControl1"
+                 v-show="isTabFixed">
+    </tab-control>
     <scroll class="content"
             ref="scroll"
             :probe-type="3"
@@ -10,12 +14,12 @@
             :pull-up-load="true"
             @pullUpLoad="loadMore"
     >
-      <home-swiper :banners="banners"/>
+      <home-swiper :banners="banners" @homeSwiperImgLoad="homeSwiperImgLoad"/>
       <recommend :recommends="recommends"/>
       <feature-view/>
-      <tab-control class="tab-control"
-                   :titles="['流行','新款','精选']"
-                   @tabClick="tabClick">
+      <tab-control :titles="['流行','新款','精选']"
+                   @tabClick="tabClick"
+                   ref="tabControl2">
       </tab-control>
       <goods-list :goods="showGoods"/>
     </scroll>
@@ -60,7 +64,9 @@
           'sell': {page: 0, list: []},
         },
         currentType: 'pop',
-        isShowBackTop: false
+        isShowBackTop: false,
+        tabOffsetTop: 0,
+        isTabFixed: false,
       }
     },
     computed: {
@@ -91,6 +97,12 @@
       /**
        * 事件监听相关的方法
        */
+      homeSwiperImgLoad() {
+        //获取tabControl的offsetTop
+        //所以组件都有一个属性$el: 用于获取组件中的元素
+        // console.log(this.tabOffsetTop = this.$refs.tabCcontrol.$el.offsetTop);
+        this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      },
       tabClick(index) {
         // console.log(index);
         switch (index) {
@@ -104,6 +116,8 @@
             this.currentType = 'sell'
             break
         }
+        this.$refs.tabControl1.currentIndex = index;
+        this.$refs.tabControl2.currentIndex = index;
       },
       backClick() {
         // console.log('哈哈哈');
@@ -111,12 +125,16 @@
         /*通过ref属性来获取scroll这个子组件，此种方式可以避免class重名重名的问题*/
       },
       loadMore() {
-        console.log('下拉加载更多');
+        // console.log('下拉加载更多');
         this.getHomeGoods(this.currentType)
       },
       contentScroll(position) {
         // console.log(position);
+        // 1.判断BackTop是否显示
         this.isShowBackTop = (-position.y) > 1000
+
+        // 2.决定tabControl是否吸顶(position: fixed)
+        this.isTabFixed = (-position.y) > this.tabOffsetTop
       },
       /**
        * 网络请求相关的方法
@@ -131,9 +149,11 @@
       getHomeGoods(type) {
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
-          this.goods[type].list.push(...res.data.list) /*该方法能够将一个数组的数据直接添加到另一个数组去*/
+          this.goods[type].list.push(...res.data.list)
+          /*该方法能够将一个数组的数据直接添加到另一个数组去*/
           this.goods[type].page += 1
-          this.$refs.scroll.finishPullUp()/*如果没有这个方法，下拉加载更多只能加载一次*/
+          this.$refs.scroll.finishPullUp()
+          /*如果没有这个方法，下拉加载更多只能加载一次*/
         })
 
       }

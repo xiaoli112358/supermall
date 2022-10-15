@@ -1,8 +1,9 @@
+<!--轮播图组件-->
 <template>
   <Swiper>
     <SwiperItem v-for="item in banners">
       <a :href="item.link">
-        <img :src="item.image" alt="">
+        <img :src="item.image" alt="" @load="imgLoad">
       </a>
     </SwiperItem>
   </Swiper>
@@ -21,9 +22,23 @@
         }
       }
     },
+    data(){
+      return{
+        isLoad:false
+      }
+    },
     components: {
       Swiper,
       SwiperItem
+    },
+    methods:{
+      imgLoad(){
+        // console.log('------------');
+        if (!this.isLoad){//这么判断只会给父组件emit一次，而不是四次
+          this.$emit('homeSwiperImgLoad')
+          this.isLoad=true
+        }
+      }
     }
   }
 </script>
