@@ -1,6 +1,8 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <nav-bar class="home-nav">
+      <div slot="center">购物街</div>
+    </nav-bar>
     <scroll class="content"
             ref="scroll"
             :probe-type="3"
@@ -65,6 +67,14 @@
         return this.goods[this.currentType].list
       }
     },
+    mounted() {
+      // 1.图片加载完成的事件监听
+      this.$bus.$on('itemImgLoad', () => {/*监听到了子组件的itemImgLoad方法*/
+        // console.log('------------');
+        // this.$refs.scroll.scroll.refresh()/*判定图片加载完成了就调用一下滚动的刷新方法*/
+        this.$refs.scroll.refresh()
+      })
+    },
     created() {
       // 1.请求多个数据
       this.getHomeMultiData();
@@ -94,9 +104,10 @@
       },
       backClick() {
         // console.log('哈哈哈');
-        this.$refs.scroll.scrollTo(0, 0)/*通过ref属性来获取scroll这个子组件，此种方式可以避免class重名重名的问题*/
+        this.$refs.scroll.scrollTo(0, 0)
+        /*通过ref属性来获取scroll这个子组件，此种方式可以避免class重名重名的问题*/
       },
-      loadMore(){
+      loadMore() {
         console.log('下拉加载更多');
         this.getHomeGoods(this.currentType)
       },

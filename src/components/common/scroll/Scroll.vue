@@ -52,6 +52,9 @@
       //加载更多的时候，加载完必须调用该方法，否则下拉加载更多只能调用一次
       finishPullUp(){
         this.scroll.finishPullUp()
+      },
+      refresh(){
+        this.scroll.refresh()
       }
     }
   }

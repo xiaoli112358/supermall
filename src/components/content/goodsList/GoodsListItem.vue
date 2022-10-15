@@ -1,6 +1,6 @@
 <template>
   <div class="goods-list-item">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="goodsItem.show.img" alt="" @load="imgLoad"><!--在img标签中@load代表图片加载完成-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -18,6 +18,13 @@
         default() {
           return {}
         }
+      }
+    },
+    methods:{
+      imgLoad(){
+        // console.log('图片加载完成');
+        this.$bus.$emit('itemImgLoad')/*给主组件发射一个方法itemImgLoad*/
+
       }
     }
   }
