@@ -5,6 +5,8 @@
             ref="scroll"
             :probe-type="3"
             @scrollPosition="contentScroll"
+            :pull-up-load="true"
+            @pullUpLoad="loadMore"
     >
       <home-swiper :banners="banners"/>
       <recommend :recommends="recommends"/>
@@ -94,8 +96,12 @@
         // console.log('哈哈哈');
         this.$refs.scroll.scrollTo(0, 0)
       },
+      loadMore(){
+        console.log('下拉加载更多');
+        this.getHomeGoods(this.currentType)
+      },
       contentScroll(position) {
-        console.log(position);
+        // console.log(position);
         this.isShowBackTop = (-position.y) > 1000
       },
       /**
@@ -114,7 +120,7 @@
           this.goods[type].list.push(...res.data.list)
           /*该方法能够将一个数组的数据直接添加到另一个数组去*/
           this.goods[type].page += 1
-
+          this.$refs.scroll.finishPullUp()
         })
 
       }
