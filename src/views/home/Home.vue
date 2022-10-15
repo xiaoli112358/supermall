@@ -36,6 +36,7 @@
   import BackTop from 'components/content/backTop/BackTop'
 
   import {getHomeMultiData, getHomeGoods} from "network/home"
+  import {debounce} from "common/utils";
 
   export default {
     name: "Home",
@@ -69,10 +70,12 @@
     },
     mounted() {
       // 1.图片加载完成的事件监听
+      const refresh = debounce(this.$refs.scroll.refresh, 500)
       this.$bus.$on('itemImgLoad', () => {/*监听到了子组件的itemImgLoad方法*/
         // console.log('------------');
         // this.$refs.scroll.scroll.refresh()/*判定图片加载完成了就调用一下滚动的刷新方法*/
-        this.$refs.scroll.refresh()
+        // this.$refs.scroll.refresh()
+        refresh()
       })
     },
     created() {
