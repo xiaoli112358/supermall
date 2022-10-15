@@ -1,6 +1,8 @@
 <template>
   <div id="home">
-    <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+    <nav-bar class="home-nav">
+      <div slot="center">购物街</div>
+    </nav-bar>
     <tab-control class="tab-control"
                  :titles="['流行','新款','精选']"
                  @tabClick="tabClick"
@@ -67,6 +69,7 @@
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
+        saveY: 0
       }
     },
     computed: {
@@ -83,6 +86,17 @@
         // this.$refs.scroll.refresh()
         refresh()
       })
+
+    },
+    destroyed() {//该方法因为在App组件中使用了keep-alive属性，所以该方法不再生效
+      console.log('home destroyed');
+    },
+    activated() {//进入组件
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated() {//离开组件
+      this.saveY = this.$refs.scroll.getScrollY()
     },
     created() {
       // 1.请求多个数据
