@@ -1,9 +1,13 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <scroll class="content" ref="scroll">
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            @scrollPosition="contentScroll"
+    >
       <home-swiper :banners="banners"/>
-      <recommend :recommends="recommends" />
+      <recommend :recommends="recommends"/>
       <feature-view/>
       <tab-control class="tab-control"
                    :titles="['流行','新款','精选']"
@@ -11,7 +15,7 @@
       </tab-control>
       <goods-list :goods="showGoods"/>
     </scroll>
-    <BackTop @click.native="backClick"></BackTop>
+    <BackTop @click.native="backClick" v-show="isShowBackTop"></BackTop>
 
   </div>
 </template>
@@ -50,11 +54,12 @@
           'new': {page: 0, list: []},
           'sell': {page: 0, list: []},
         },
-        currentType:'pop'
+        currentType: 'pop',
+        isShowBackTop: false
       }
     },
-    computed:{
-      showGoods(){
+    computed: {
+      showGoods() {
         return this.goods[this.currentType].list
       }
     },
@@ -70,24 +75,28 @@
     methods: {
       /**
        * 事件监听相关的方法
-      */
-      tabClick(index){
+       */
+      tabClick(index) {
         // console.log(index);
-        switch (index){
+        switch (index) {
           case 0:
-            this.currentType='pop'
+            this.currentType = 'pop'
             break
           case 1:
-            this.currentType='new'
+            this.currentType = 'new'
             break
           case 2:
-            this.currentType='sell'
+            this.currentType = 'sell'
             break
         }
       },
-      backClick(){
+      backClick() {
         // console.log('哈哈哈');
         this.$refs.scroll.scrollTo(0, 0)
+      },
+      contentScroll(position) {
+        console.log(position);
+        this.isShowBackTop = (-position.y) > 1000
       },
       /**
        * 网络请求相关的方法
@@ -102,7 +111,8 @@
       getHomeGoods(type) {
         const page = this.goods[type].page + 1;
         getHomeGoods(type, page).then(res => {
-          this.goods[type].list.push(...res.data.list)/*该方法能够将一个数组的数据直接添加到另一个数组去*/
+          this.goods[type].list.push(...res.data.list)
+          /*该方法能够将一个数组的数据直接添加到另一个数组去*/
           this.goods[type].page += 1
 
         })
@@ -137,13 +147,19 @@
     top: 44px;
     z-index: 9;
   }
-  .content{
-    overflow: hidden;
 
-    position: absolute;
-    top: 44px;
-    bottom: 49px;
-    left: 0;
-    right: 0;
+  /*.content{*/
+  /*overflow: hidden;*/
+
+  /*position: absolute;*/
+  /*top: 44px;*/
+  /*bottom: 49px;*/
+  /*left: 0;*/
+  /*right: 0;*/
+  /*}*/
+  .content {
+    height: calc(100% - 44px - 29px);
+    overflow: hidden;
+    margin-top: 44px;
   }
 </style>
