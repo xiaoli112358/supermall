@@ -1,9 +1,11 @@
 <template>
   <div id="detail">
-    <detail-nav-bar/>
-    <detail-swiper :topImages="topImages"></detail-swiper>
-    <detail-base-info :goods="goods"/>
-    <detail-shop-info :shop="shop"></detail-shop-info>
+    <detail-nav-bar class="detail-nav"/>
+    <scroll class="content">
+      <detail-swiper :topImages="topImages"></detail-swiper>
+      <detail-base-info :goods="goods"/>
+      <detail-shop-info :shop="shop"></detail-shop-info>
+    </scroll>
   </div>
 </template>
 
@@ -12,8 +14,9 @@
   import DetailSwiper from 'views/detail/childComps/DetailSwiper'
   import DetailBaseInfo from 'views/detail/childComps/DetailBaseInfo'
   import DetailShopInfo from 'views/detail/childComps/DetailShopInfo'
+  import Scroll from 'components/common/scroll/Scroll'
 
-  import {getDetail, Goods,Shop} from "network/detail"
+  import {getDetail, Goods, Shop} from "network/detail"
 
   export default {
     name: "detail",
@@ -21,7 +24,8 @@
       DetailNavBar,
       DetailSwiper,
       DetailBaseInfo,
-      DetailShopInfo
+      DetailShopInfo,
+      Scroll
     },
     data() {
       return {
@@ -53,11 +57,25 @@
 </script>
 
 <style scoped>
-  #detail{
+  #detail {
     position: relative;
     z-index: 9;
     background-color: #fff;
 
+    height: 100vh;
   }
 
+  .content {
+    /*使用better-scroll必须给改组件设置一个高度*/
+    /*设置高度的时候必须给整体设置一个高度，也就是上面的100vh*/
+    height: calc(100% - 44px);
+
+  }
+
+  /*为了不让标题栏跟着滚动，设置一个相对位置的设置*/
+  .detail-nav {
+    position: relative;
+    z-index: 9;
+    background-color: #fff;
+  }
 </style>
