@@ -1,5 +1,5 @@
 <template>
-  <div class="detail">
+  <div id="detail">
     <detail-nav-bar/>
     <detail-swiper :topImages="topImages"></detail-swiper>
     <detail-base-info :goods="goods"/>
@@ -53,5 +53,11 @@
 </script>
 
 <style scoped>
+  #detail{
+    position: relative;
+    z-index: 9;
+    background-color: #fff;
+
+  }
 
 </style>
